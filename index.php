@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!preg_match($passwordPattern, $password)) {$errors[] = "Password must be at least 8 characters long and contain uppercase, lowercase, a number, and a special character.";
     }
 
-    // 3. Check Database for Existing Username (only if input validation passed)
+    // 3. Check Database for Existing Username
     if (empty($errors)) {
         $stmt =$conn->prepare("SELECT `username` FROM `users` WHERE `username` = ?");
         $stmt->bind_param("s", $username);
@@ -45,8 +45,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         } else {
             $errors[] = "Database error: Unable to complete registration.";
+            $stmt->close();
         }
-        $stmt->close();
     }
 }
 ?>
@@ -58,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Register</title>
 </head>
 <body>
-    <h3>Login System</h3>
+    <h3>Register Account</h3>
     
     <?php if (!empty($errors)): ?>
         <ul style="color: red;">
